@@ -22,10 +22,6 @@ ChartJS.register(
 
 function App() {
   const [values, setValues] = useState();
-  const [content, setContent] = useState([]);
-  const [title, setTitle] = useState();
-  const [labels, setLabels] = useState();
-  const [numbers, setNumbers] = useState();
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(false);
   const [variable, setVariable] = useState([]);
@@ -48,38 +44,31 @@ function App() {
       .catch((err) => console.log(err));
   }, []);
 
-  // const options = {
-  //   responsive: true,
-  //   plugins: {
-  //     legend: {
-  //       position: "top",
-  //     },
-  //     title: {
-  //       display: true,
-  //       text: title,
-  //     },
-  //   },
-  // };
-
-  // const data = {
-  //   labels,
-  //   datasets: [
-  //     {
-  //       label: title,
-  //       data: numbers,
-  //       backgroundColor: "#48189a",
-  //     },
-  //   ],
-  // };
-
   return (
     <div className="p-0 bg-electric-violet-100 h-screen">
       <h1 className="text-2xl font-bold text-electric-violet-900 text-center p-4">
         Banxico Data Grapher
       </h1>
-      <div className="card grid grid-cols-12 m-0 p-0 h-5/6">
-        {list ? (
-          <ul className="col-span-3 text-left bg-electric-violet-500 rounded-lg m-2 p-2 text-electric-violet-100 overflow-auto">
+      <div className="grid grid-cols-12 m-0 p-0  h-5/6">
+        <div
+          className={`col-start-5 col-span-4  ${
+            list ? "hidden" : "flex flex-col"
+          } bg-electric-violet-500 rounded-lg m-2 p-2 text-electric-violet-100 overflow-auto `}
+        >
+          <div className="flex items-center justify-between px-4">
+            <p className="text-electric-violet-100 font-extrabold text-xl">
+              Choose an element to graph
+            </p>
+            <button
+              onClick={(e) => {
+                setList(!list);
+              }}
+              className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 m-2 rounded-full"
+            >
+              x
+            </button>
+          </div>
+          <ul className={``}>
             {values && values.length > 0 ? (
               values.map((index) => {
                 return (
@@ -101,16 +90,21 @@ function App() {
                             {
                               variable: index.variable,
                               title: res.data.bmx.series,
-                              numbers: res.data.bmx.series[0].datos.map((a) => a.dato),
-                              labels: res.data.bmx.series[0].datos.map((a) => a.fecha)
+                              numbers: res.data.bmx.series[0].datos.map(
+                                (a) => a.dato
+                              ),
+                              labels: res.data.bmx.series[0].datos.map(
+                                (a) => a.fecha
+                              ),
                             },
                           ]);
                           setLoading(false);
+                          setList(!list);
                         })
                         .catch((err) => console.log(err));
                     }}
                     key={index.variable}
-                    className="py-4 px-2 font-medium rounded-lg hover:underline hover:cursor-pointer hover:bg-electric-violet-800 hover:rounded-lg transition"
+                    className="py-4 px-2 m-2 font-medium rounded-lg hover:underline hover:cursor-pointer hover:bg-electric-violet-800 hover:rounded-lg transition"
                   >
                     <p className="font-bold">{index.variable}</p>
                     <p className="text-sm">{index.display_name}</p>
@@ -122,11 +116,13 @@ function App() {
               <h2></h2>
             )}
           </ul>
-        ) : (
-          <p></p>
-        )}
+        </div>
 
-        <div className="col-span-9 flex flex-col content-start rounded m-2 overflow-auto bg-electric-violet-300">
+        <div
+          className={`col-span-12 content-start rounded m-2 overflow-auto ${
+            list ? "flex flex-col" : "hidden"
+          } bg-electric-violet-300`}
+        >
           <button
             onClick={(e) => {
               setList(!list);
@@ -140,7 +136,10 @@ function App() {
               variable.map((element) => {
                 console.log(element);
                 return (
-                  <div key={element.variable} className="bg-electric-violet-50 my-4 p-4 rounded-lg">
+                  <div
+                    key={element.variable}
+                    className="bg-electric-violet-50 my-4 p-4 rounded-lg"
+                  >
                     <h1>{element.variable}</h1>
                     <Bar
                       options={{
