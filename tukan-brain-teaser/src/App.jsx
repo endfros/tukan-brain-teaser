@@ -17,6 +17,7 @@ import {
   Legend,
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
+import "./app.css";
 
 ChartJS.register(
   CategoryScale,
@@ -97,7 +98,7 @@ function App() {
   const [dateFormat, setDateFormat] = useState("DMY");
   const [decimals, setDecimals] = useState(4);
   const [display, setDisplay] = useState("bar");
-  const [date, setDate] = useState([]);
+  const [date, setDate] = useState(["1999-10-29", "2022-10-29"]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(true);
   const [variable, setVariable] = useState([]);
@@ -142,6 +143,16 @@ function App() {
     setVariable(items);
   }
 
+  const handleDecimals = (value) => {
+    if (value < 0) {
+      setDecimals(0);
+    } else if (value === null){
+      setDecimals(0);
+    } else {
+      setDecimals(Number(value));
+    }
+  };
+
   return (
     <div className="p-0 bg-electric-violet-100 h-screen">
       <h1 className="text-2xl font-bold text-electric-violet-900 text-center p-4">
@@ -150,7 +161,7 @@ function App() {
       <div className="grid grid-cols-12 m-0 p-0 h-5/6">
         <AnimatePresence>
           {!list && (
-            <div>
+            <div className="flex">
               <div className="transition-opacity" aria-hidden="true">
                 <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
               </div>
@@ -178,7 +189,7 @@ function App() {
                 }}
               >
                 <div
-                  className={`h-5/6 z-10 absolute left-1/4 w-3/6 bg-electric-violet-500 rounded-lg m-2 p-2 text-electric-violet-100 overflow-auto`}
+                  className={`h-5/6 z-10 absolute left-0 right-0 ml-auto mr-auto w-11/12 md:left-1/4 md:w-3/6 bg-electric-violet-500 rounded-lg md:m-2 p-2 text-electric-violet-100 overflow-auto`}
                 >
                   {/* Modal header and close button */}
                   <div className="flex items-center justify-between px-4">
@@ -195,80 +206,84 @@ function App() {
                     </button>
                   </div>
                   {/* Modal title input */}
-                  <div className="px-4">
-                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                  <div className="px-4 flex flex-col items-center">
+                    <p className="text-electric-violet-100 font-extrabold md:text-xl ">
                       Choose your preferred title:
                     </p>
                     <input
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="rounded px-4 py-2 text-electric-violet-900"
+                      className="rounded px-4 py-2 m-2 text-electric-violet-900"
                       type="text"
                     />
                   </div>
                   {/* Modal language input */}
-                  <div className="px-4">
-                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                  <div className="px-4 flex flex-col items-center">
+                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                       Choose your preferred laguage:
                     </p>
-                    <button
-                      className={`${
-                        !english
-                          ? "bg-electric-violet-900 transition"
-                          : "transition"
-                      } p-4 rounded-xl`}
-                      onClick={(e) => {
-                        setEnglish(false);
-                      }}
-                    >
-                      Spanish
-                    </button>
-                    <button
-                      className={`${
-                        english
-                          ? "bg-electric-violet-900 transition"
-                          : "transition"
-                      } p-4 rounded-xl`}
-                      onClick={(e) => {
-                        setEnglish(true);
-                      }}
-                    >
-                      English
-                    </button>
+                    <section className="p-2">
+                      <button
+                        className={`${
+                          !english
+                            ? "bg-electric-violet-900 transition"
+                            : "transition"
+                        } p-4 rounded-xl`}
+                        onClick={(e) => {
+                          setEnglish(false);
+                        }}
+                      >
+                        Spanish
+                      </button>
+                      <button
+                        className={`${
+                          english
+                            ? "bg-electric-violet-900 transition"
+                            : "transition"
+                        } p-4 rounded-xl`}
+                        onClick={(e) => {
+                          setEnglish(true);
+                        }}
+                      >
+                        English
+                      </button>
+                    </section>
                   </div>
                   {/* Modal data presentation */}
-                  <div className="px-4">
-                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                  <div className="px-4 flex flex-col items-center">
+                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                       Choose how you want to visualize the data:
                     </p>
-                    <button
-                      className={`${
-                        !chart
-                          ? "bg-electric-violet-900 transition"
-                          : "transition"
-                      } p-4 rounded-xl`}
-                      onClick={(e) => {
-                        setChart(false);
-                      }}
-                    >
-                      Graph
-                    </button>
-                    <button
-                      className={`${
-                        chart
-                          ? "bg-electric-violet-900 transition"
-                          : "transition"
-                      } p-4 rounded-xl`}
-                      onClick={(e) => {
-                        setChart(true);
-                        setDisplay("chart");
-                      }}
-                    >
-                      Chart
-                    </button>
+                    <section className="p-2">
+                      <button
+                        className={`${
+                          !chart
+                            ? "bg-electric-violet-900 transition"
+                            : "transition"
+                        } p-4 rounded-xl`}
+                        onClick={(e) => {
+                          setChart(false);
+                        }}
+                      >
+                        Graph
+                      </button>
+                      <button
+                        className={`${
+                          chart
+                            ? "bg-electric-violet-900 transition"
+                            : "transition"
+                        } p-4 rounded-xl`}
+                        onClick={(e) => {
+                          setChart(true);
+                          setDisplay("chart");
+                        }}
+                      >
+                        Chart
+                      </button>
+                    </section>
                   </div>
                   <div className="px-4">
-                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                       Choose the start and end date range for the data
                     </p>
                     <section className="flex justify-around py-4">
@@ -302,8 +317,8 @@ function App() {
                   graph */}
                   {!chart ? (
                     <div>
-                      <div className="flex items-center justify-between px-4">
-                        <p className="text-electric-violet-100 font-extrabold text-xl">
+                      <div className="flex items-center justify-between px-4 py-2">
+                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
                           Choose the graph type:
                         </p>
                         <button
@@ -333,12 +348,12 @@ function App() {
                           Line
                         </button>
                       </div>
-                      <div className="flex items-center justify-between px-4 my-2">
-                        <p className="text-electric-violet-100 font-extrabold text-xl">
+                      <div className="flex flex-col lg:flex-row items-center justify-between px-4 my-4">
+                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
                           Choose the color:
                         </p>
                         <button
-                          className={`w-12 h-6 static border-solid border-electric-violet-50 border-4`}
+                          className={`w-12 h-6 static border-solid m-4 lg:m-0 border-electric-violet-50 border-4`}
                           onClick={(e) => {
                             setOpenPicker(!openPicker);
                           }}
@@ -358,57 +373,62 @@ function App() {
                     </div>
                   ) : (
                     <div>
-                      <div className="flex items-center justify-between px-4">
-                        <p className="text-electric-violet-100 font-extrabold text-xl">
+                      <div className="flex flex-col md:flex-row items-center justify-between px-4">
+                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
                           Choose the number of decimals data will have:
                         </p>
                         <input
                           value={decimals}
-                          onChange={(e) => setDecimals(e.target.value)}
+                          min="0"
+                          onChange={(e) => {
+                            handleDecimals(e.target.value);
+                          }}
                           type="number"
-                          className="rounded px-4 py-2 text-electric-violet-900"
+                          className="rounded px-4 py-2 my-2 text-electric-violet-900"
                         />
                       </div>
-                      <div className="flex items-center justify-between px-4 my-2">
-                        <p className="text-electric-violet-100 font-extrabold text-xl">
+                      <div className="flex flex-col md:flex-row items-center justify-between px-4 my-2">
+                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
                           Choose date format:
                         </p>
-                        <button
-                          className={`${
-                            dateFormat === "DMY"
-                              ? "bg-electric-violet-900 transition"
-                              : "transition"
-                          } p-4 rounded-xl`}
-                          onClick={(e) => {
-                            setDateFormat("DMY");
-                          }}
-                        >
-                          DD/MM/YYYY
-                        </button>
-                        <button
-                          className={`${
-                            dateFormat === "YMD"
-                              ? "bg-electric-violet-900 transition"
-                              : "transition"
-                          } p-4 rounded-xl`}
-                          onClick={(e) => {
-                            setDateFormat("YMD");
-                          }}
-                        >
-                          YYYY/MM/DD
-                        </button>
-                        <button
-                          className={`${
-                            dateFormat === "MDY"
-                              ? "bg-electric-violet-900 transition"
-                              : "transition"
-                          } p-4 rounded-xl`}
-                          onClick={(e) => {
-                            setDateFormat("MDY");
-                          }}
-                        >
-                          MM/DD/YYYY
-                        </button>
+                        <section className="flex flex-wrap xl:flex-nowrap my-2 justify-center">
+                          <button
+                            className={`${
+                              dateFormat === "DMY"
+                                ? "bg-electric-violet-900 transition"
+                                : "transition"
+                            } p-4 rounded-xl`}
+                            onClick={(e) => {
+                              setDateFormat("DMY");
+                            }}
+                          >
+                            DD/MM/YYYY
+                          </button>
+                          <button
+                            className={`${
+                              dateFormat === "YMD"
+                                ? "bg-electric-violet-900 transition"
+                                : "transition"
+                            } p-4 rounded-xl`}
+                            onClick={(e) => {
+                              setDateFormat("YMD");
+                            }}
+                          >
+                            YYYY/MM/DD
+                          </button>
+                          <button
+                            className={`${
+                              dateFormat === "MDY"
+                                ? "bg-electric-violet-900 transition"
+                                : "transition"
+                            } p-4 rounded-xl`}
+                            onClick={(e) => {
+                              setDateFormat("MDY");
+                            }}
+                          >
+                            MM/DD/YYYY
+                          </button>
+                        </section>
                       </div>
                     </div>
                   )}
@@ -497,7 +517,7 @@ function App() {
             }}
             className="rounded-full self-center text-2xl px-4 py-2 m-4 text-electric-violet-50 text-center bg-electric-violet-900"
           >
-            Add graph
+            Add element
           </button>
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="droppable">
@@ -509,9 +529,9 @@ function App() {
                 >
                   {variable.map((element, index) => {
                     localStorage.setItem("variables", JSON.stringify(variable));
-                    console.log(JSON.parse(localStorage.getItem("variables")));
+                    console.log(decimals)
                     return (
-                      <div>
+                      <div key={element.variable}>
                         <AnimatePresence>
                           {edit && (
                             <div>
@@ -545,13 +565,13 @@ function App() {
                                 }}
                               >
                                 <div
-                                  className={`h-auto flex flex-col absolute z-10 left-1/4 top-20 w-3/6 bg-electric-violet-500 rounded-lg p-6 text-electric-violet-100 overflow-auto`}
+                                  className={`h-auto flex flex-col w-11/12 absolute z-10 md:left-1/4 top-20 md:w-3/6 bg-electric-violet-500 rounded-lg p-6 text-electric-violet-100 overflow-auto`}
                                 >
-                                  <p className="text-electric-violet-100 font-extrabold text-xl">
-                                    Editando el {item.variable}
+                                  <p className="text-electric-violet-100 font-extrabold text-lg md:text-xl">
+                                    Editing item: {item.variable}
                                   </p>
-                                  <div className="flex justify-between px-4 my-4">
-                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                  <div className="flex justify-between items-center my-4">
+                                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                                       Edit your title:
                                     </p>
                                     <input
@@ -564,12 +584,12 @@ function App() {
                                       type="text"
                                     />
                                   </div>
-                                  <div className="flex items-center justify-between px-4 my-4">
-                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                  <div className="flex flex-col lg:flex-row justify-between">
+                                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                                       Edit the graph color:
                                     </p>
                                     <button
-                                      className={`w-12 h-6 static border-solid border-electric-violet-50 border-4`}
+                                      className={`w-12 h-6 static border-solid self-center my-4 border-electric-violet-50 border-4`}
                                       onClick={(e) => {
                                         setOpenPicker(!openPicker);
                                       }}
@@ -577,7 +597,7 @@ function App() {
                                         backgroundColor: `${blockPickerColor}`,
                                       }}
                                     ></button>
-                                    <div className="w-48">
+                                    <div className="w-48 my-4 self-center">
                                       <SliderPicker
                                         color={blockPickerColor}
                                         onChange={(color) => {
@@ -587,37 +607,39 @@ function App() {
                                       />
                                     </div>
                                   </div>
-                                  <div className="px-4">
-                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                  <div className="flex flex-col">
+                                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
                                       Edit how you want to visualize the data:
                                     </p>
-                                    <button
-                                      className={`${
-                                        item.displayType &&
-                                        item.displayType === "bar"
-                                          ? `bg-electric-violet-900 transition}`
-                                          : "transition"
-                                      } p-4 rounded-xl`}
-                                      onClick={(e) => {
-                                        setBar(true);
-                                        item.displayType = "bar";
-                                      }}
-                                    >
-                                      Bar
-                                    </button>
-                                    <button
-                                      className={`${
-                                        item.displayType === "line"
-                                          ? `bg-electric-violet-900 transition}`
-                                          : "transition"
-                                      } p-4 rounded-xl`}
-                                      onClick={(e) => {
-                                        setBar(false);
-                                        item.displayType = "line";
-                                      }}
-                                    >
-                                      Line
-                                    </button>
+                                    <section className="flex flex-row justify-center my-4">
+                                      <button
+                                        className={`${
+                                          item.displayType &&
+                                          item.displayType === "bar"
+                                            ? `bg-electric-violet-900 transition}`
+                                            : "transition"
+                                        } p-4 rounded-xl`}
+                                        onClick={(e) => {
+                                          setBar(true);
+                                          item.displayType = "bar";
+                                        }}
+                                      >
+                                        Bar
+                                      </button>
+                                      <button
+                                        className={`${
+                                          item.displayType === "line"
+                                            ? `bg-electric-violet-900 transition}`
+                                            : "transition"
+                                        } p-4 rounded-xl`}
+                                        onClick={(e) => {
+                                          setBar(false);
+                                          item.displayType = "line";
+                                        }}
+                                      >
+                                        Line
+                                      </button>
+                                    </section>
                                   </div>
                                   <button
                                     onClick={(e) => {
@@ -635,157 +657,156 @@ function App() {
                             </div>
                           )}
                         </AnimatePresence>
-                        <Draggable
-                        key={element.variable}
-                        draggableId={element.variable}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            className="bg-electric-violet-50 my-4 p-4 rounded-lg"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <div ref={exportRef}>
-                              <div className="flex justify-around items-center my-4">
-                                <h1 className="font-bold capitalize">
-                                  {element.customTitle}
-                                </h1>
-                                <div>
-                                  <button
-                                    onClick={(e) => {
-                                      console.log(
-                                        `Edita esta carta ${element.variable}`
-                                      );
-                                      setEdit(!edit);
-                                      setItem(element);
-                                    }}
-                                    className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
-                                  >
-                                    Edit
-                                  </button>
+                        <Draggable draggableId={element.variable} index={index}>
+                          {(provided) => (
+                            <div
+                              className="bg-electric-violet-50 my-4 p-4 rounded-lg"
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <div ref={exportRef}>
+                                <div className="flex justify-center md:justify-between my-4">
+                                  <h1 className="font-bold capitalize">
+                                    {element.customTitle}
+                                  </h1>
+                                  <div>
+                                    <button
+                                      onClick={(e) => {
+                                        console.log(
+                                          `Edita esta carta ${element.variable}`
+                                        );
+                                        setEdit(!edit);
+                                        setItem(element);
+                                      }}
+                                      className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
+                                    >
+                                      Edit
+                                    </button>
 
+                                    <button
+                                      onClick={(e) => {
+                                        console.log(
+                                          `Descarga esta carta ${element.variable}`
+                                        );
+                                        exportAsImage(
+                                          exportRef.current,
+                                          "test"
+                                        );
+                                      }}
+                                      className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
+                                    >
+                                      Download
+                                    </button>
 
-
-                                  <button
-                                    onClick={(e) => {
-                                      console.log(
-                                        `Descarga esta carta ${element.variable}`
-                                      );
-                                      exportAsImage(exportRef.current, "test");
-                                    }}
-                                    className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
-                                  >
-                                    Download
-                                  </button>
-
-                                  <button
-                                    onClick={(e) => {
-                                      console.log(
-                                        `Elimina esta carta ${element.variable}`
-                                      );
-                                      const newList = variable.filter(
-                                        (item) =>
-                                          item.variable !== element.variable
-                                      );
-                                      console.log(newList);
-                                      setVariable(newList);
-                                    }}
-                                    className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
-                                  >
-                                    x
-                                  </button>
-                                </div>
-                              </div>
-                              {element.displayType === "bar" ? (
-                                <Bar
-                                  options={{
-                                    responsive: true,
-                                    plugins: {
-                                      legend: {
-                                        position: "top",
-                                      },
-                                      title: {
-                                        display: true,
-                                        text: element.graphTitle[0].titulo,
-                                      },
-                                    },
-                                  }}
-                                  data={{
-                                    labels: element.labels,
-                                    datasets: [
-                                      {
-                                        label: element.variable,
-                                        data: element.numbers,
-                                        backgroundColor: element.graphColor,
-                                      },
-                                    ],
-                                  }}
-                                />
-                              ) : element.displayType === "line" ? (
-                                <Line
-                                  options={{
-                                    responsive: true,
-                                    plugins: {
-                                      legend: {
-                                        position: "top",
-                                      },
-                                      title: {
-                                        display: true,
-                                        text: element.graphTitle[0].titulo,
-                                      },
-                                    },
-                                  }}
-                                  data={{
-                                    labels: element.labels,
-                                    datasets: [
-                                      {
-                                        label: element.variable,
-                                        data: element.numbers,
-                                        backgroundColor: element.graphColor,
-                                      },
-                                    ],
-                                  }}
-                                />
-                              ) : element.displayType === "chart" ? (
-                                <div>
-                                  <div className="flex justify-center">
-                                    <Table
-                                      columns={[
-                                        {
-                                          Header: element.graphTitle[0].titulo,
-                                          columns: [
-                                            {
-                                              Header: "Fecha",
-                                              accessor: "fecha",
-                                            },
-                                            {
-                                              Header: "Dato",
-                                              accessor: "dato",
-                                            },
-                                          ],
-                                        },
-                                      ]}
-                                      data={element.labels.map(function (
-                                        value,
-                                        index
-                                      ) {
-                                        return {
-                                          fecha: value,
-                                          dato: element.numbers[index],
-                                        };
-                                      })}
-                                    />
+                                    <button
+                                      onClick={(e) => {
+                                        console.log(
+                                          `Elimina esta carta ${element.variable}`
+                                        );
+                                        const newList = variable.filter(
+                                          (item) =>
+                                            item.variable !== element.variable
+                                        );
+                                        console.log(newList);
+                                        localStorage.setItem("variables", JSON.stringify(newList))
+                                        setVariable(newList);
+                                      }}
+                                      className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
+                                    >
+                                      x
+                                    </button>
                                   </div>
                                 </div>
-                              ) : (
-                                <p></p>
-                              )}
+                                {element.displayType === "bar" ? (
+                                  <Bar
+                                    options={{
+                                      responsive: true,
+                                      plugins: {
+                                        legend: {
+                                          position: "top",
+                                        },
+                                        title: {
+                                          display: true,
+                                          text: element.graphTitle[0].titulo,
+                                        },
+                                      },
+                                    }}
+                                    data={{
+                                      labels: element.labels,
+                                      datasets: [
+                                        {
+                                          label: element.variable,
+                                          data: element.numbers,
+                                          backgroundColor: element.graphColor,
+                                        },
+                                      ],
+                                    }}
+                                  />
+                                ) : element.displayType === "line" ? (
+                                  <Line
+                                    options={{
+                                      responsive: true,
+                                      plugins: {
+                                        legend: {
+                                          position: "top",
+                                        },
+                                        title: {
+                                          display: true,
+                                          text: element.graphTitle[0].titulo,
+                                        },
+                                      },
+                                    }}
+                                    data={{
+                                      labels: element.labels,
+                                      datasets: [
+                                        {
+                                          label: element.variable,
+                                          data: element.numbers,
+                                          backgroundColor: element.graphColor,
+                                        },
+                                      ],
+                                    }}
+                                  />
+                                ) : element.displayType === "chart" ? (
+                                  <div>
+                                    <div className="flex justify-center">
+                                      <Table
+                                        columns={[
+                                          {
+                                            Header:
+                                              element.graphTitle[0].titulo,
+                                            columns: [
+                                              {
+                                                Header: "Fecha",
+                                                accessor: "fecha",
+                                              },
+                                              {
+                                                Header: "Dato",
+                                                accessor: "dato",
+                                              },
+                                            ],
+                                          },
+                                        ]}
+                                        data={element.labels.map(function (
+                                          value,
+                                          index
+                                        ) {
+                                          return {
+                                            fecha: value,
+                                            dato: element.numbers[index],
+                                          };
+                                        })}
+                                      />
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <p></p>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </Draggable>
+                          )}
+                        </Draggable>
                       </div>
                     );
                   })}
