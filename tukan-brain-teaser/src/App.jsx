@@ -1,7 +1,8 @@
 import axios from "axios";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SliderPicker } from "react-color";
+import exportAsImage from "./utils/exportAsImage";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTable } from "react-table";
 import {
@@ -96,6 +97,7 @@ function App() {
   const [dateFormat, setDateFormat] = useState("DMY");
   const [decimals, setDecimals] = useState(4);
   const [display, setDisplay] = useState("bar");
+  const [date, setDate] = useState([]);
   const [loading, setLoading] = useState(true);
   const [list, setList] = useState(true);
   const [variable, setVariable] = useState([]);
@@ -105,6 +107,7 @@ function App() {
   const [blockPickerColor, setBlockPickerColor] = useState("#48189a");
   const [openPicker, setOpenPicker] = useState(false);
   const [english, setEnglish] = useState(false);
+  const exportRef = useRef();
 
   useEffect(() => {
     axios
@@ -122,8 +125,8 @@ function App() {
         setValues(res.data.data);
         setLoading(false);
         JSON.parse(localStorage.getItem("variables"))
-          ? (setVariable(JSON.parse(localStorage.getItem("variables"))))
-          : (setVariable([]));
+          ? setVariable(JSON.parse(localStorage.getItem("variables")))
+          : setVariable([]);
         // setVariable(JSON.parse(localStorage.getItem("variables")))
       })
       .catch((err) => console.log(err));
@@ -264,6 +267,37 @@ function App() {
                       Chart
                     </button>
                   </div>
+                  <div className="px-4">
+                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                      Choose the start and end date range for the data
+                    </p>
+                    <section className="flex justify-around py-4">
+                      <div>
+                        <p className="text-electric-violet-100 ">Start date:</p>
+                        <input
+                          defaultValue={"1999-10-29"}
+                          onChange={(e) => {
+                            date[0] = e.target.value;
+                            console.log(date);
+                          }}
+                          className="rounded px-4 py-2 text-electric-violet-900"
+                          type="date"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-electric-violet-100 ">End date:</p>
+                        <input
+                          defaultValue={"2022-10-29"}
+                          onChange={(e) => {
+                            date[1] = e.target.value;
+                            console.log(date);
+                          }}
+                          className="rounded px-4 py-2 text-electric-violet-900"
+                          type="date"
+                        />
+                      </div>
+                    </section>
+                  </div>
                   {/* Modal options depending if you want to show a table or a
                   graph */}
                   {!chart ? (
@@ -386,7 +420,7 @@ function App() {
                             onClick={() => {
                               axios
                                 .get(
-                                  `https://5i8qcjp333.execute-api.us-east-1.amazonaws.com/dev/series/${index.variable}?token=b24da979c4e5787e082743e930717c9251ec16cb569f2b3b4b404739f9f030d6`,
+                                  `https://5i8qcjp333.execute-api.us-east-1.amazonaws.com/dev/series/${index.variable}/${date[0]}/${date[1]}?token=b24da979c4e5787e082743e930717c9251ec16cb569f2b3b4b404739f9f030d6`,
                                   {
                                     headers: {
                                       Authorization:
@@ -477,7 +511,131 @@ function App() {
                     localStorage.setItem("variables", JSON.stringify(variable));
                     console.log(JSON.parse(localStorage.getItem("variables")));
                     return (
-                      <Draggable
+                      <div>
+                        <AnimatePresence>
+                          {edit && (
+                            <div>
+                              <div
+                                className="transition-opacity"
+                                aria-hidden="true"
+                              >
+                                <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
+                              </div>
+                              <motion.div
+                                className="flex justify-center static px-4 sm:p-0"
+                                initial={{
+                                  opacity: 0,
+                                  scale: 1,
+                                }}
+                                animate={{
+                                  opacity: 1,
+                                  scale: 1,
+                                  transition: {
+                                    ease: "easeOut",
+                                    duration: 0.5,
+                                  },
+                                }}
+                                exit={{
+                                  opacity: 0,
+                                  scale: 1,
+                                  transition: {
+                                    ease: "easeIn",
+                                    duration: 0.5,
+                                  },
+                                }}
+                              >
+                                <div
+                                  className={`h-auto flex flex-col absolute z-10 left-1/4 top-20 w-3/6 bg-electric-violet-500 rounded-lg p-6 text-electric-violet-100 overflow-auto`}
+                                >
+                                  <p className="text-electric-violet-100 font-extrabold text-xl">
+                                    Editando el {item.variable}
+                                  </p>
+                                  <div className="flex justify-between px-4 my-4">
+                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                      Edit your title:
+                                    </p>
+                                    <input
+                                      defaultValue={item.customTitle}
+                                      onChange={(e) => {
+                                        console.log(item.customTitle);
+                                        item.customTitle = e.target.value;
+                                      }}
+                                      className="rounded px-4 py-2 text-electric-violet-900"
+                                      type="text"
+                                    />
+                                  </div>
+                                  <div className="flex items-center justify-between px-4 my-4">
+                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                      Edit the graph color:
+                                    </p>
+                                    <button
+                                      className={`w-12 h-6 static border-solid border-electric-violet-50 border-4`}
+                                      onClick={(e) => {
+                                        setOpenPicker(!openPicker);
+                                      }}
+                                      style={{
+                                        backgroundColor: `${blockPickerColor}`,
+                                      }}
+                                    ></button>
+                                    <div className="w-48">
+                                      <SliderPicker
+                                        color={blockPickerColor}
+                                        onChange={(color) => {
+                                          setBlockPickerColor(color.hex);
+                                          item.graphColor = blockPickerColor;
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className="px-4">
+                                    <p className="text-electric-violet-100 font-extrabold text-xl">
+                                      Edit how you want to visualize the data:
+                                    </p>
+                                    <button
+                                      className={`${
+                                        item.displayType &&
+                                        item.displayType === "bar"
+                                          ? `bg-electric-violet-900 transition}`
+                                          : "transition"
+                                      } p-4 rounded-xl`}
+                                      onClick={(e) => {
+                                        setBar(true);
+                                        item.displayType = "bar";
+                                      }}
+                                    >
+                                      Bar
+                                    </button>
+                                    <button
+                                      className={`${
+                                        item.displayType === "line"
+                                          ? `bg-electric-violet-900 transition}`
+                                          : "transition"
+                                      } p-4 rounded-xl`}
+                                      onClick={(e) => {
+                                        setBar(false);
+                                        item.displayType = "line";
+                                      }}
+                                    >
+                                      Line
+                                    </button>
+                                  </div>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setEdit(!edit);
+                                      setItem(null);
+                                      setBar(true);
+                                    }}
+                                    className="rounded-full self-center text-2xl px-4 py-2 m-4 text-electric-violet-50 text-center bg-electric-violet-900"
+                                  >
+                                    Save changes
+                                  </button>
+                                </div>
+                              </motion.div>
+                            </div>
+                          )}
+                        </AnimatePresence>
+                        <Draggable
                         key={element.variable}
                         draggableId={element.variable}
                         index={index}
@@ -489,256 +647,146 @@ function App() {
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
                           >
-                            <div className="flex justify-around items-center my-4">
-                              <h1 className="font-bold capitalize">
-                                {element.customTitle}
-                              </h1>
-                              <div>
-                                <button
-                                  onClick={(e) => {
-                                    console.log(
-                                      `Edita esta carta ${element.variable}`
-                                    );
-                                    setEdit(!edit);
-                                    setItem(element);
-                                  }}
-                                  className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
-                                >
-                                  Edit
-                                </button>
-                                <AnimatePresence>
-                                  {edit && (
-                                    <div>
-                                      <div
-                                        className="transition-opacity"
-                                        aria-hidden="true"
-                                      >
-                                        <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-                                      </div>
-                                      <motion.div
-                                        className="flex justify-center static px-4 sm:p-0"
-                                        initial={{
-                                          opacity: 0,
-                                          scale: 1,
-                                        }}
-                                        animate={{
-                                          opacity: 1,
-                                          scale: 1,
-                                          transition: {
-                                            ease: "easeOut",
-                                            duration: 0.5,
-                                          },
-                                        }}
-                                        exit={{
-                                          opacity: 0,
-                                          scale: 1,
-                                          transition: {
-                                            ease: "easeIn",
-                                            duration: 0.5,
-                                          },
-                                        }}
-                                      >
-                                        <div
-                                          className={`h-auto flex flex-col absolute z-10 left-1/4 top-20 w-3/6 bg-electric-violet-500 rounded-lg p-6 text-electric-violet-100 overflow-auto`}
-                                        >
-                                          <p className="text-electric-violet-100 font-extrabold text-xl">
-                                            Editando el {item.variable}
-                                          </p>
-                                          <div className="flex justify-between px-4 my-4">
-                                            <p className="text-electric-violet-100 font-extrabold text-xl">
-                                              Edit your title:
-                                            </p>
-                                            <input
-                                              defaultValue={item.customTitle}
-                                              onChange={(e) => {
-                                                console.log(item.customTitle);
-                                                item.customTitle =
-                                                  e.target.value;
-                                              }}
-                                              className="rounded px-4 py-2 text-electric-violet-900"
-                                              type="text"
-                                            />
-                                          </div>
-                                          <div className="flex items-center justify-between px-4 my-4">
-                                            <p className="text-electric-violet-100 font-extrabold text-xl">
-                                              Edit the graph color:
-                                            </p>
-                                            <button
-                                              className={`w-12 h-6 static border-solid border-electric-violet-50 border-4`}
-                                              onClick={(e) => {
-                                                setOpenPicker(!openPicker);
-                                              }}
-                                              style={{
-                                                backgroundColor: `${blockPickerColor}`,
-                                              }}
-                                            ></button>
-                                            <div className="w-48">
-                                              <SliderPicker
-                                                color={blockPickerColor}
-                                                onChange={(color) => {
-                                                  setBlockPickerColor(
-                                                    color.hex
-                                                  );
-                                                  item.graphColor =
-                                                    blockPickerColor;
-                                                }}
-                                              />
-                                            </div>
-                                          </div>
-                                          <div className="px-4">
-                                            <p className="text-electric-violet-100 font-extrabold text-xl">
-                                              Edit how you want to visualize the
-                                              data:
-                                            </p>
-                                            <button
-                                              className={`${
-                                                item.displayType &&
-                                                item.displayType === "bar"
-                                                  ? `bg-electric-violet-900 transition}`
-                                                  : "transition"
-                                              } p-4 rounded-xl`}
-                                              onClick={(e) => {
-                                                setBar(true);
-                                                item.displayType = "bar";
-                                              }}
-                                            >
-                                              Bar
-                                            </button>
-                                            <button
-                                              className={`${
-                                                item.displayType === "line"
-                                                  ? `bg-electric-violet-900 transition}`
-                                                  : "transition"
-                                              } p-4 rounded-xl`}
-                                              onClick={(e) => {
-                                                setBar(false);
-                                                item.displayType = "line";
-                                              }}
-                                            >
-                                              Line
-                                            </button>
-                                          </div>
-                                          <button
-                                            onClick={(e) => {
-                                              e.preventDefault();
-                                              setEdit(!edit);
-                                              setItem(null);
-                                              setBar(true);
-                                            }}
-                                            className="rounded-full self-center text-2xl px-4 py-2 m-4 text-electric-violet-50 text-center bg-electric-violet-900"
-                                          >
-                                            Save changes
-                                          </button>
-                                        </div>
-                                      </motion.div>
-                                    </div>
-                                  )}
-                                </AnimatePresence>
-                                <button
-                                  onClick={(e) => {
-                                    console.log(
-                                      `Elimina esta carta ${element.variable}`
-                                    );
-                                    const newList = variable.filter(
-                                      (item) =>
-                                        item.variable !== element.variable
-                                    );
-                                    console.log(newList);
-                                    setVariable(newList);
-                                  }}
-                                  className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
-                                >
-                                  x
-                                </button>
-                              </div>
-                            </div>
-                            {element.displayType === "bar" ? (
-                              <Bar
-                                options={{
-                                  responsive: true,
-                                  plugins: {
-                                    legend: {
-                                      position: "top",
-                                    },
-                                    title: {
-                                      display: true,
-                                      text: element.graphTitle[0].titulo,
-                                    },
-                                  },
-                                }}
-                                data={{
-                                  labels: element.labels,
-                                  datasets: [
-                                    {
-                                      label: element.variable,
-                                      data: element.numbers,
-                                      backgroundColor: element.graphColor,
-                                    },
-                                  ],
-                                }}
-                              />
-                            ) : element.displayType === "line" ? (
-                              <Line
-                                options={{
-                                  responsive: true,
-                                  plugins: {
-                                    legend: {
-                                      position: "top",
-                                    },
-                                    title: {
-                                      display: true,
-                                      text: element.graphTitle[0].titulo,
-                                    },
-                                  },
-                                }}
-                                data={{
-                                  labels: element.labels,
-                                  datasets: [
-                                    {
-                                      label: element.variable,
-                                      data: element.numbers,
-                                      backgroundColor: element.graphColor,
-                                    },
-                                  ],
-                                }}
-                              />
-                            ) : element.displayType === "chart" ? (
-                              <div>
-                                <div className="flex justify-center">
-                                  <Table
-                                    columns={[
-                                      {
-                                        Header: element.graphTitle[0].titulo,
-                                        columns: [
-                                          {
-                                            Header: "Fecha",
-                                            accessor: "fecha",
-                                          },
-                                          {
-                                            Header: "Dato",
-                                            accessor: "dato",
-                                          },
-                                        ],
-                                      },
-                                    ]}
-                                    data={element.labels.map(function (
-                                      value,
-                                      index
-                                    ) {
-                                      return {
-                                        fecha: value,
-                                        dato: element.numbers[index],
-                                      };
-                                    })}
-                                  />
+                            <div ref={exportRef}>
+                              <div className="flex justify-around items-center my-4">
+                                <h1 className="font-bold capitalize">
+                                  {element.customTitle}
+                                </h1>
+                                <div>
+                                  <button
+                                    onClick={(e) => {
+                                      console.log(
+                                        `Edita esta carta ${element.variable}`
+                                      );
+                                      setEdit(!edit);
+                                      setItem(element);
+                                    }}
+                                    className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
+                                  >
+                                    Edit
+                                  </button>
+
+
+
+                                  <button
+                                    onClick={(e) => {
+                                      console.log(
+                                        `Descarga esta carta ${element.variable}`
+                                      );
+                                      exportAsImage(exportRef.current, "test");
+                                    }}
+                                    className="bg-electric-violet-900 self-end hover:bg-electric-violet-600 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 mx-2 rounded-full"
+                                  >
+                                    Download
+                                  </button>
+
+                                  <button
+                                    onClick={(e) => {
+                                      console.log(
+                                        `Elimina esta carta ${element.variable}`
+                                      );
+                                      const newList = variable.filter(
+                                        (item) =>
+                                          item.variable !== element.variable
+                                      );
+                                      console.log(newList);
+                                      setVariable(newList);
+                                    }}
+                                    className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
+                                  >
+                                    x
+                                  </button>
                                 </div>
                               </div>
-                            ) : (
-                              <p></p>
-                            )}
+                              {element.displayType === "bar" ? (
+                                <Bar
+                                  options={{
+                                    responsive: true,
+                                    plugins: {
+                                      legend: {
+                                        position: "top",
+                                      },
+                                      title: {
+                                        display: true,
+                                        text: element.graphTitle[0].titulo,
+                                      },
+                                    },
+                                  }}
+                                  data={{
+                                    labels: element.labels,
+                                    datasets: [
+                                      {
+                                        label: element.variable,
+                                        data: element.numbers,
+                                        backgroundColor: element.graphColor,
+                                      },
+                                    ],
+                                  }}
+                                />
+                              ) : element.displayType === "line" ? (
+                                <Line
+                                  options={{
+                                    responsive: true,
+                                    plugins: {
+                                      legend: {
+                                        position: "top",
+                                      },
+                                      title: {
+                                        display: true,
+                                        text: element.graphTitle[0].titulo,
+                                      },
+                                    },
+                                  }}
+                                  data={{
+                                    labels: element.labels,
+                                    datasets: [
+                                      {
+                                        label: element.variable,
+                                        data: element.numbers,
+                                        backgroundColor: element.graphColor,
+                                      },
+                                    ],
+                                  }}
+                                />
+                              ) : element.displayType === "chart" ? (
+                                <div>
+                                  <div className="flex justify-center">
+                                    <Table
+                                      columns={[
+                                        {
+                                          Header: element.graphTitle[0].titulo,
+                                          columns: [
+                                            {
+                                              Header: "Fecha",
+                                              accessor: "fecha",
+                                            },
+                                            {
+                                              Header: "Dato",
+                                              accessor: "dato",
+                                            },
+                                          ],
+                                        },
+                                      ]}
+                                      data={element.labels.map(function (
+                                        value,
+                                        index
+                                      ) {
+                                        return {
+                                          fecha: value,
+                                          dato: element.numbers[index],
+                                        };
+                                      })}
+                                    />
+                                  </div>
+                                </div>
+                              ) : (
+                                <p></p>
+                              )}
+                            </div>
                           </div>
                         )}
                       </Draggable>
+                      </div>
                     );
                   })}
                   {provided.placeholder}
