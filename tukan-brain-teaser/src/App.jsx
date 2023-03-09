@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SliderPicker } from "react-color";
+import tukanLogo from "./assets/tukanLogo.png";
 import exportAsImage from "./utils/exportAsImage";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTable } from "react-table";
@@ -40,10 +41,13 @@ function Table({ columns, data }) {
     <table className="text-center" {...getTableProps()}>
       <thead>
         {headerGroups.map((headerGroup) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
+          <tr
+            className="py-2 border-slate-800 border-b-2"
+            {...headerGroup.getHeaderGroupProps()}
+          >
             {headerGroup.headers.map((column) => (
               <th
-                className="border-2 border-solid border-slate-700"
+                className="py-4 border-slate-800 border-b-2"
                 {...column.getHeaderProps()}
               >
                 {column.render("Header")}
@@ -56,13 +60,13 @@ function Table({ columns, data }) {
         {rows.map((row, i) => {
           prepareRow(row);
           return (
-            <tr {...row.getRowProps()}>
+            <tr
+              className="border-solid border-2 border-slate-100 border-t-slate-300 border-b-slate-300"
+              {...row.getRowProps()}
+            >
               {row.cells.map((cell) => {
                 return (
-                  <td
-                    className="border-2 border-solid border-slate-700"
-                    {...cell.getCellProps()}
-                  >
+                  <td className="py-3 border-none" {...cell.getCellProps()}>
                     {cell.render("Cell")}
                   </td>
                 );
@@ -104,7 +108,7 @@ function App() {
   const [bar, setBar] = useState(true);
   const [item, setItem] = useState();
   const [chart, setChart] = useState(false);
-  const [blockPickerColor, setBlockPickerColor] = useState("#48189a");
+  const [blockPickerColor, setBlockPickerColor] = useState("#0f0ccb");
   const [openPicker, setOpenPicker] = useState(false);
   const [english, setEnglish] = useState(false);
   const exportRef = useRef();
@@ -191,9 +195,9 @@ function App() {
                   className={`h-5/6 z-10 absolute left-0 right-0 ml-auto mr-auto w-11/12 md:left-1/4 md:w-3/6 bg-electric-violet-500 rounded-lg md:m-2 p-2 text-electric-violet-100 overflow-auto`}
                 >
                   {/* Modal header and close button */}
-                  <div className="flex items-center justify-between px-4">
+                  <div className="flex items-center justify-between px-4 py-2">
                     <p className="text-electric-violet-100 font-extrabold text-xl">
-                      Choose an element to see its values.
+                      Options:
                     </p>
                     <button
                       onClick={(e) => {
@@ -204,20 +208,21 @@ function App() {
                       x
                     </button>
                   </div>
+                  <div className="bg-electric-violet-600 rounded-lg mx-2 p-2">
                   {/* Modal title input */}
-                  <div className="px-4 flex flex-col items-center">
+                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
                     <p className="text-electric-violet-100 font-extrabold md:text-xl ">
                       Choose your preferred title:
                     </p>
                     <input
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      className="rounded px-4 py-2 m-2 text-electric-violet-900"
+                      className="rounded px-4 py-2 m-2 md:w-full text-electric-violet-900"
                       type="text"
                     />
                   </div>
                   {/* Modal language input */}
-                  <div className="px-4 flex flex-col items-center">
+                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
                     <p className="text-electric-violet-100 font-extrabold md:text-xl">
                       Choose your preferred laguage:
                     </p>
@@ -249,7 +254,7 @@ function App() {
                     </section>
                   </div>
                   {/* Modal data presentation */}
-                  <div className="px-4 flex flex-col items-center">
+                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
                     <p className="text-electric-violet-100 font-extrabold md:text-xl">
                       Choose how you want to visualize the data:
                     </p>
@@ -281,8 +286,8 @@ function App() {
                       </button>
                     </section>
                   </div>
-                  <div className="px-4">
-                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                  <div className="px-4 md:my-3">
+                    <p className="text-electric-violet-100 font-extrabold md:text-xl ">
                       Choose the start and end date range for the data
                     </p>
                     <section className="flex justify-around py-4">
@@ -316,7 +321,7 @@ function App() {
                   graph */}
                   {!chart ? (
                     <div>
-                      <div className="flex items-center justify-between px-4 py-2">
+                      <div className="flex items-center justify-between px-4 py-2 ">
                         <p className="text-electric-violet-100 font-extrabold md:text-xl">
                           Choose the graph type:
                         </p>
@@ -431,6 +436,10 @@ function App() {
                       </div>
                     </div>
                   )}
+                  </div>
+                  <p className="text-electric-violet-100 mx-2 p-2 pt-6 font-extrabold text-xl">
+                    Choose the data you want to display:
+                  </p>
                   <ul className={``}>
                     {values && values.length > 0 ? (
                       values.map((index) => {
@@ -659,13 +668,14 @@ function App() {
                         <Draggable draggableId={element.variable} index={index}>
                           {(provided) => (
                             <div
-                              className="bg-electric-violet-50 my-4 mx-24 p-12 rounded-lg"
+                              className="bg-electric-violet-50 my-4 lg:mx-24 p-2 md:p-12 rounded-lg"
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                             >
                               <div ref={exportRef}>
-                                <div className="flex justify-center md:justify-between my-4">
+                                <div className="flex justify-center md:justify-between  my-2 md:my-4">
+                                  <img src={tukanLogo} className="hidden md:block md:h-12 lg:h-16" alt="" />
                                   <h1 className="font-bold capitalize">
                                     {element.customTitle}
                                   </h1>
@@ -714,7 +724,7 @@ function App() {
                                         );
                                         setVariable(newList);
                                       }}
-                                      className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
+                                      className="bg-electric-violet-900 md:self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
                                     >
                                       x
                                     </button>
