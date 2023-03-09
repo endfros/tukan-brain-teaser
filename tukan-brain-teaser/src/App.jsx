@@ -17,7 +17,6 @@ import {
   Legend,
 } from "chart.js";
 import { Bar, Line } from "react-chartjs-2";
-import "./app.css";
 
 ChartJS.register(
   CategoryScale,
@@ -146,7 +145,7 @@ function App() {
   const handleDecimals = (value) => {
     if (value < 0) {
       setDecimals(0);
-    } else if (value === null){
+    } else if (value === null) {
       setDecimals(0);
     } else {
       setDecimals(Number(value));
@@ -529,7 +528,7 @@ function App() {
                 >
                   {variable.map((element, index) => {
                     localStorage.setItem("variables", JSON.stringify(variable));
-                    console.log(decimals)
+                    console.log(decimals);
                     return (
                       <div key={element.variable}>
                         <AnimatePresence>
@@ -660,7 +659,7 @@ function App() {
                         <Draggable draggableId={element.variable} index={index}>
                           {(provided) => (
                             <div
-                              className="bg-electric-violet-50 my-4 p-4 rounded-lg"
+                              className="bg-electric-violet-50 my-4 mx-24 p-12 rounded-lg"
                               ref={provided.innerRef}
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
@@ -709,7 +708,10 @@ function App() {
                                             item.variable !== element.variable
                                         );
                                         console.log(newList);
-                                        localStorage.setItem("variables", JSON.stringify(newList))
+                                        localStorage.setItem(
+                                          "variables",
+                                          JSON.stringify(newList)
+                                        );
                                         setVariable(newList);
                                       }}
                                       className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 rounded-full"
