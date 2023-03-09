@@ -219,9 +219,6 @@ export const DataContainer = (props) => {
 
                               <button
                                 onClick={(e) => {
-                                  console.log(
-                                    `Descarga esta carta ${element.variable}`
-                                  );
                                   exportAsImage(
                                     exportRef.current[index],
                                     `data${element.customTitle}`
