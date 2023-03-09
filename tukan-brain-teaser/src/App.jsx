@@ -209,233 +209,235 @@ function App() {
                     </button>
                   </div>
                   <div className="bg-electric-violet-600 rounded-lg mx-2 p-2">
-                  {/* Modal title input */}
-                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
-                    <p className="text-electric-violet-100 font-extrabold md:text-xl ">
-                      Choose your preferred title:
-                    </p>
-                    <input
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      className="rounded px-4 py-2 m-2 md:w-full text-electric-violet-900"
-                      type="text"
-                    />
-                  </div>
-                  {/* Modal language input */}
-                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
-                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                      Choose your preferred laguage:
-                    </p>
-                    <section className="p-2">
-                      <button
-                        className={`${
-                          !english
-                            ? "bg-electric-violet-900 transition"
-                            : "transition"
-                        } p-4 rounded-xl`}
-                        onClick={(e) => {
-                          setEnglish(false);
-                        }}
-                      >
-                        Spanish
-                      </button>
-                      <button
-                        className={`${
-                          english
-                            ? "bg-electric-violet-900 transition"
-                            : "transition"
-                        } p-4 rounded-xl`}
-                        onClick={(e) => {
-                          setEnglish(true);
-                        }}
-                      >
-                        English
-                      </button>
-                    </section>
-                  </div>
-                  {/* Modal data presentation */}
-                  <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
-                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                      Choose how you want to visualize the data:
-                    </p>
-                    <section className="p-2">
-                      <button
-                        className={`${
-                          !chart
-                            ? "bg-electric-violet-900 transition"
-                            : "transition"
-                        } p-4 rounded-xl`}
-                        onClick={(e) => {
-                          setChart(false);
-                        }}
-                      >
-                        Graph
-                      </button>
-                      <button
-                        className={`${
-                          chart
-                            ? "bg-electric-violet-900 transition"
-                            : "transition"
-                        } p-4 rounded-xl`}
-                        onClick={(e) => {
-                          setChart(true);
-                          setDisplay("chart");
-                        }}
-                      >
-                        Chart
-                      </button>
-                    </section>
-                  </div>
-                  <div className="px-4 md:my-3">
-                    <p className="text-electric-violet-100 font-extrabold md:text-xl ">
-                      Choose the start and end date range for the data
-                    </p>
-                    <section className="flex justify-around py-4">
-                      <div>
-                        <p className="text-electric-violet-100 ">Start date:</p>
-                        <input
-                          defaultValue={"1999-10-29"}
-                          onChange={(e) => {
-                            date[0] = e.target.value;
-                            console.log(date);
-                          }}
-                          className="rounded px-4 py-2 text-electric-violet-900"
-                          type="date"
-                        />
-                      </div>
-                      <div>
-                        <p className="text-electric-violet-100 ">End date:</p>
-                        <input
-                          defaultValue={"2022-10-29"}
-                          onChange={(e) => {
-                            date[1] = e.target.value;
-                            console.log(date);
-                          }}
-                          className="rounded px-4 py-2 text-electric-violet-900"
-                          type="date"
-                        />
-                      </div>
-                    </section>
-                  </div>
-                  {/* Modal options depending if you want to show a table or a
-                  graph */}
-                  {!chart ? (
-                    <div>
-                      <div className="flex items-center justify-between px-4 py-2 ">
-                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                          Choose the graph type:
-                        </p>
+                    {/* Modal title input */}
+                    <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
+                      <p className="text-electric-violet-100 font-extrabold md:text-xl ">
+                        Choose your preferred title:
+                      </p>
+                      <input
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        className="rounded px-4 py-2 m-2 md:w-full text-electric-violet-900"
+                        type="text"
+                      />
+                    </div>
+                    {/* Modal language input */}
+                    <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
+                      <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                        Choose your preferred laguage:
+                      </p>
+                      <section className="p-2">
                         <button
                           className={`${
-                            bar
+                            !english
                               ? "bg-electric-violet-900 transition"
                               : "transition"
                           } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setBar(true);
-                            setDisplay("bar");
+                            setEnglish(false);
                           }}
                         >
-                          Bar
+                          Spanish
                         </button>
                         <button
                           className={`${
-                            !bar
+                            english
                               ? "bg-electric-violet-900 transition"
                               : "transition"
                           } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setBar(false);
-                            setDisplay("line");
+                            setEnglish(true);
                           }}
                         >
-                          Line
+                          English
                         </button>
-                      </div>
-                      <div className="flex flex-col lg:flex-row items-center justify-between px-4 my-4">
-                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                          Choose the color:
-                        </p>
+                      </section>
+                    </div>
+                    {/* Modal data presentation */}
+                    <div className="px-4 flex flex-col items-center md:flex-row md:items-center md:justify-between md:my-3">
+                      <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                        Choose how you want to visualize the data:
+                      </p>
+                      <section className="p-2">
                         <button
-                          className={`w-12 h-6 static border-solid m-4 lg:m-0 border-electric-violet-50 border-4`}
+                          className={`${
+                            !chart
+                              ? "bg-electric-violet-900 transition"
+                              : "transition"
+                          } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setOpenPicker(!openPicker);
+                            setChart(false);
                           }}
-                          style={{
-                            backgroundColor: `${blockPickerColor}`,
+                        >
+                          Graph
+                        </button>
+                        <button
+                          className={`${
+                            chart
+                              ? "bg-electric-violet-900 transition"
+                              : "transition"
+                          } p-4 rounded-xl`}
+                          onClick={(e) => {
+                            setChart(true);
+                            setDisplay("chart");
                           }}
-                        ></button>
-                        <div className="w-48">
-                          <SliderPicker
-                            color={blockPickerColor}
-                            onChange={(color) => {
-                              setBlockPickerColor(color.hex);
+                        >
+                          Chart
+                        </button>
+                      </section>
+                    </div>
+                    <div className="px-4 md:my-3">
+                      <p className="text-electric-violet-100 font-extrabold md:text-xl ">
+                        Choose the start and end date range for the data
+                      </p>
+                      <section className="flex justify-around py-4">
+                        <div>
+                          <p className="text-electric-violet-100 ">
+                            Start date:
+                          </p>
+                          <input
+                            defaultValue={"1999-10-29"}
+                            onChange={(e) => {
+                              date[0] = e.target.value;
+                              console.log(date);
                             }}
+                            className="rounded px-4 py-2 text-electric-violet-900"
+                            type="date"
                           />
                         </div>
-                      </div>
+                        <div>
+                          <p className="text-electric-violet-100 ">End date:</p>
+                          <input
+                            defaultValue={"2022-10-29"}
+                            onChange={(e) => {
+                              date[1] = e.target.value;
+                              console.log(date);
+                            }}
+                            className="rounded px-4 py-2 text-electric-violet-900"
+                            type="date"
+                          />
+                        </div>
+                      </section>
                     </div>
-                  ) : (
-                    <div>
-                      <div className="flex flex-col md:flex-row items-center justify-between px-4">
-                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                          Choose the number of decimals data will have:
-                        </p>
-                        <input
-                          value={decimals}
-                          min="0"
-                          onChange={(e) => {
-                            handleDecimals(e.target.value);
-                          }}
-                          type="number"
-                          className="rounded px-4 py-2 my-2 text-electric-violet-900"
-                        />
+                    {/* Modal options depending if you want to show a table or a
+                  graph */}
+                    {!chart ? (
+                      <div>
+                        <div className="flex items-center justify-between px-4 py-2 ">
+                          <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                            Choose the graph type:
+                          </p>
+                          <button
+                            className={`${
+                              bar
+                                ? "bg-electric-violet-900 transition"
+                                : "transition"
+                            } p-4 rounded-xl`}
+                            onClick={(e) => {
+                              setBar(true);
+                              setDisplay("bar");
+                            }}
+                          >
+                            Bar
+                          </button>
+                          <button
+                            className={`${
+                              !bar
+                                ? "bg-electric-violet-900 transition"
+                                : "transition"
+                            } p-4 rounded-xl`}
+                            onClick={(e) => {
+                              setBar(false);
+                              setDisplay("line");
+                            }}
+                          >
+                            Line
+                          </button>
+                        </div>
+                        <div className="flex flex-col lg:flex-row items-center justify-between px-4 my-4">
+                          <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                            Choose the color:
+                          </p>
+                          <button
+                            className={`w-12 h-6 static border-solid m-4 lg:m-0 border-electric-violet-50 border-4`}
+                            onClick={(e) => {
+                              setOpenPicker(!openPicker);
+                            }}
+                            style={{
+                              backgroundColor: `${blockPickerColor}`,
+                            }}
+                          ></button>
+                          <div className="w-48">
+                            <SliderPicker
+                              color={blockPickerColor}
+                              onChange={(color) => {
+                                setBlockPickerColor(color.hex);
+                              }}
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex flex-col md:flex-row items-center justify-between px-4 my-2">
-                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                          Choose date format:
-                        </p>
-                        <section className="flex flex-wrap xl:flex-nowrap my-2 justify-center">
-                          <button
-                            className={`${
-                              dateFormat === "DMY"
-                                ? "bg-electric-violet-900 transition"
-                                : "transition"
-                            } p-4 rounded-xl`}
-                            onClick={(e) => {
-                              setDateFormat("DMY");
+                    ) : (
+                      <div>
+                        <div className="flex flex-col md:flex-row items-center justify-between px-4">
+                          <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                            Choose the number of decimals data will have:
+                          </p>
+                          <input
+                            value={decimals}
+                            min="0"
+                            onChange={(e) => {
+                              handleDecimals(e.target.value);
                             }}
-                          >
-                            DD/MM/YYYY
-                          </button>
-                          <button
-                            className={`${
-                              dateFormat === "YMD"
-                                ? "bg-electric-violet-900 transition"
-                                : "transition"
-                            } p-4 rounded-xl`}
-                            onClick={(e) => {
-                              setDateFormat("YMD");
-                            }}
-                          >
-                            YYYY/MM/DD
-                          </button>
-                          <button
-                            className={`${
-                              dateFormat === "MDY"
-                                ? "bg-electric-violet-900 transition"
-                                : "transition"
-                            } p-4 rounded-xl`}
-                            onClick={(e) => {
-                              setDateFormat("MDY");
-                            }}
-                          >
-                            MM/DD/YYYY
-                          </button>
-                        </section>
+                            type="number"
+                            className="rounded px-4 py-2 my-2 text-electric-violet-900"
+                          />
+                        </div>
+                        <div className="flex flex-col md:flex-row items-center justify-between px-4 my-2">
+                          <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                            Choose date format:
+                          </p>
+                          <section className="flex flex-wrap xl:flex-nowrap my-2 justify-center">
+                            <button
+                              className={`${
+                                dateFormat === "DMY"
+                                  ? "bg-electric-violet-900 transition"
+                                  : "transition"
+                              } p-4 rounded-xl`}
+                              onClick={(e) => {
+                                setDateFormat("DMY");
+                              }}
+                            >
+                              DD/MM/YYYY
+                            </button>
+                            <button
+                              className={`${
+                                dateFormat === "YMD"
+                                  ? "bg-electric-violet-900 transition"
+                                  : "transition"
+                              } p-4 rounded-xl`}
+                              onClick={(e) => {
+                                setDateFormat("YMD");
+                              }}
+                            >
+                              YYYY/MM/DD
+                            </button>
+                            <button
+                              className={`${
+                                dateFormat === "MDY"
+                                  ? "bg-electric-violet-900 transition"
+                                  : "transition"
+                              } p-4 rounded-xl`}
+                              onClick={(e) => {
+                                setDateFormat("MDY");
+                              }}
+                            >
+                              MM/DD/YYYY
+                            </button>
+                          </section>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                   </div>
                   <p className="text-electric-violet-100 mx-2 p-2 pt-6 font-extrabold text-xl">
                     Choose the data you want to display:
@@ -592,63 +594,72 @@ function App() {
                                       type="text"
                                     />
                                   </div>
-                                  <div className="flex flex-col lg:flex-row justify-between">
-                                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                                      Edit the graph color:
-                                    </p>
-                                    <button
-                                      className={`w-12 h-6 static border-solid self-center my-4 border-electric-violet-50 border-4`}
-                                      onClick={(e) => {
-                                        setOpenPicker(!openPicker);
-                                      }}
-                                      style={{
-                                        backgroundColor: `${blockPickerColor}`,
-                                      }}
-                                    ></button>
-                                    <div className="w-48 my-4 self-center">
-                                      <SliderPicker
-                                        color={blockPickerColor}
-                                        onChange={(color) => {
-                                          setBlockPickerColor(color.hex);
-                                          item.graphColor = blockPickerColor;
-                                        }}
-                                      />
+                                  {item.displayType === "chart" ? (
+                                    <p></p>
+                                  ) : (
+                                    <div>
+                                      <div className="flex flex-col lg:flex-row justify-between">
+                                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                                          Edit the graph color:
+                                        </p>
+                                        <button
+                                          className={`w-12 h-6 static border-solid self-center my-4 border-electric-violet-50 border-4`}
+                                          onClick={(e) => {
+                                            setOpenPicker(!openPicker);
+                                          }}
+                                          style={{
+                                            backgroundColor: `${blockPickerColor}`,
+                                          }}
+                                        ></button>
+                                        <div className="w-48 my-4 self-center">
+                                          <SliderPicker
+                                            color={blockPickerColor}
+                                            onChange={(color) => {
+                                              setBlockPickerColor(color.hex);
+                                              item.graphColor =
+                                                blockPickerColor;
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                      <div className="flex flex-col">
+                                        <p className="text-electric-violet-100 font-extrabold md:text-xl">
+                                          Edit how you want to visualize the
+                                          data:
+                                        </p>
+                                        <section className="flex flex-row justify-center my-4">
+                                          <button
+                                            className={`${
+                                              item.displayType &&
+                                              item.displayType === "bar"
+                                                ? `bg-electric-violet-900 transition}`
+                                                : "transition"
+                                            } p-4 rounded-xl`}
+                                            onClick={(e) => {
+                                              setBar(true);
+                                              item.displayType = "bar";
+                                            }}
+                                          >
+                                            Bar
+                                          </button>
+                                          <button
+                                            className={`${
+                                              item.displayType === "line"
+                                                ? `bg-electric-violet-900 transition}`
+                                                : "transition"
+                                            } p-4 rounded-xl`}
+                                            onClick={(e) => {
+                                              setBar(false);
+                                              item.displayType = "line";
+                                            }}
+                                          >
+                                            Line
+                                          </button>
+                                        </section>
+                                      </div>
                                     </div>
-                                  </div>
-                                  <div className="flex flex-col">
-                                    <p className="text-electric-violet-100 font-extrabold md:text-xl">
-                                      Edit how you want to visualize the data:
-                                    </p>
-                                    <section className="flex flex-row justify-center my-4">
-                                      <button
-                                        className={`${
-                                          item.displayType &&
-                                          item.displayType === "bar"
-                                            ? `bg-electric-violet-900 transition}`
-                                            : "transition"
-                                        } p-4 rounded-xl`}
-                                        onClick={(e) => {
-                                          setBar(true);
-                                          item.displayType = "bar";
-                                        }}
-                                      >
-                                        Bar
-                                      </button>
-                                      <button
-                                        className={`${
-                                          item.displayType === "line"
-                                            ? `bg-electric-violet-900 transition}`
-                                            : "transition"
-                                        } p-4 rounded-xl`}
-                                        onClick={(e) => {
-                                          setBar(false);
-                                          item.displayType = "line";
-                                        }}
-                                      >
-                                        Line
-                                      </button>
-                                    </section>
-                                  </div>
+                                  )}
+
                                   <button
                                     onClick={(e) => {
                                       e.preventDefault();
@@ -675,7 +686,11 @@ function App() {
                             >
                               <div ref={exportRef}>
                                 <div className="flex justify-center md:justify-between  my-2 md:my-4">
-                                  <img src={tukanLogo} className="hidden md:block md:h-12 lg:h-16" alt="" />
+                                  <img
+                                    src={tukanLogo}
+                                    className="hidden md:block md:h-12 lg:h-16"
+                                    alt=""
+                                  />
                                   <h1 className="font-bold capitalize">
                                     {element.customTitle}
                                   </h1>
