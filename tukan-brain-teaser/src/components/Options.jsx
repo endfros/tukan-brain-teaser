@@ -1,14 +1,39 @@
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+
 import { SliderPicker } from "react-color";
 
 import { AnimatePresence, motion } from "framer-motion";
 
+function changeDateFormat(date, format) {
+  const dateParts = date.split("/");
+  if (format === "YMD") {
+    return dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
+  } else if (format === "MDY") {
+    return dateParts[1] + "/" + dateParts[0] + "/" + dateParts[2];
+  } else {
+    return date;
+  }
+}
+
+function round(num, places) {
+  return +(Math.round(num + "e+" + places) + "e-" + places);
+}
+
 export const Options = (props) => {
+  const handleDecimals = (value) => {
+    if (value < 0) {
+      setDecimals(0);
+    } else if (value === null) {
+      setDecimals(0);
+    } else {
+      setDecimals(Number(value));
+    }
+  };
+
   console.log(props);
   return (
     <AnimatePresence>
-      {!list && (
+      {!props.list && (
         <div className="flex">
           <div className="transition-opacity" aria-hidden="true">
             <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -46,7 +71,7 @@ export const Options = (props) => {
                 </p>
                 <button
                   onClick={(e) => {
-                    setList(!list);
+                    props.setList(!props.list);
                   }}
                   className="bg-electric-violet-900 self-end hover:bg-red-800 hover:transition-colors transition-colors text-electric-violet-100 px-4 py-2 m-2 rounded-full"
                 >
@@ -60,8 +85,8 @@ export const Options = (props) => {
                     Choose your preferred title:
                   </p>
                   <input
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={props.title}
+                    onChange={(e) => props.setTitle(e.target.value)}
                     className="rounded px-4 py-2 m-2 md:w-full text-electric-violet-900"
                     type="text"
                   />
@@ -74,24 +99,24 @@ export const Options = (props) => {
                   <section className="p-2">
                     <button
                       className={`${
-                        !english
+                        !props.english
                           ? "bg-electric-violet-900 transition"
                           : "transition"
                       } p-4 rounded-xl`}
                       onClick={(e) => {
-                        setEnglish(false);
+                        props.setEnglish(false);
                       }}
                     >
                       Spanish
                     </button>
                     <button
                       className={`${
-                        english
+                        props.english
                           ? "bg-electric-violet-900 transition"
                           : "transition"
                       } p-4 rounded-xl`}
                       onClick={(e) => {
-                        setEnglish(true);
+                        props.setEnglish(true);
                       }}
                     >
                       English
@@ -106,25 +131,25 @@ export const Options = (props) => {
                   <section className="p-2">
                     <button
                       className={`${
-                        !chart
+                        !props.chart
                           ? "bg-electric-violet-900 transition"
                           : "transition"
                       } p-4 rounded-xl`}
                       onClick={(e) => {
-                        setChart(false);
+                        props.setChart(false);
                       }}
                     >
                       Graph
                     </button>
                     <button
                       className={`${
-                        chart
+                        props.chart
                           ? "bg-electric-violet-900 transition"
                           : "transition"
                       } p-4 rounded-xl`}
                       onClick={(e) => {
-                        setChart(true);
-                        setDisplay("chart");
+                        props.setChart(true);
+                        props.setDisplay("chart");
                       }}
                     >
                       Chart
@@ -141,8 +166,7 @@ export const Options = (props) => {
                       <input
                         defaultValue={"1999-10-29"}
                         onChange={(e) => {
-                          date[0] = e.target.value;
-                          console.log(date);
+                          props.date[0] = e.target.value;
                         }}
                         className="rounded px-4 py-2 text-electric-violet-900"
                         type="date"
@@ -153,8 +177,7 @@ export const Options = (props) => {
                       <input
                         defaultValue={"2022-10-29"}
                         onChange={(e) => {
-                          date[1] = e.target.value;
-                          console.log(date);
+                          props.date[1] = e.target.value;
                         }}
                         className="rounded px-4 py-2 text-electric-violet-900"
                         type="date"
@@ -164,7 +187,7 @@ export const Options = (props) => {
                 </div>
                 {/* Modal options depending if you want to show a table or a
                   graph */}
-                {!chart ? (
+                {!props.chart ? (
                   <div>
                     <div className="flex items-center justify-between px-4 py-2 ">
                       <p className="text-electric-violet-100 font-extrabold md:text-xl">
@@ -172,26 +195,26 @@ export const Options = (props) => {
                       </p>
                       <button
                         className={`${
-                          bar
+                          props.bar
                             ? "bg-electric-violet-900 transition"
                             : "transition"
                         } p-4 rounded-xl`}
                         onClick={(e) => {
-                          setBar(true);
-                          setDisplay("bar");
+                          props.setBar(true);
+                          props.setDisplay("bar");
                         }}
                       >
                         Bar
                       </button>
                       <button
                         className={`${
-                          !bar
+                          !props.bar
                             ? "bg-electric-violet-900 transition"
                             : "transition"
                         } p-4 rounded-xl`}
                         onClick={(e) => {
-                          setBar(false);
-                          setDisplay("line");
+                          props.setBar(false);
+                          props.setDisplay("line");
                         }}
                       >
                         Line
@@ -204,17 +227,17 @@ export const Options = (props) => {
                       <button
                         className={`w-12 h-6 static border-solid m-4 lg:m-0 border-electric-violet-50 border-4`}
                         onClick={(e) => {
-                          setOpenPicker(!openPicker);
+                          props.setOpenPicker(!props.openPicker);
                         }}
                         style={{
-                          backgroundColor: `${blockPickerColor}`,
+                          backgroundColor: `${props.blockPickerColor}`,
                         }}
                       ></button>
                       <div className="w-48">
                         <SliderPicker
-                          color={blockPickerColor}
+                          color={props.blockPickerColor}
                           onChange={(color) => {
-                            setBlockPickerColor(color.hex);
+                            props.setBlockPickerColor(color.hex);
                           }}
                         />
                       </div>
@@ -227,7 +250,7 @@ export const Options = (props) => {
                         Choose the number of decimals data will have:
                       </p>
                       <input
-                        value={decimals}
+                        value={props.decimals}
                         min="0"
                         onChange={(e) => {
                           handleDecimals(e.target.value);
@@ -243,36 +266,36 @@ export const Options = (props) => {
                       <section className="flex flex-wrap xl:flex-nowrap my-2 justify-center">
                         <button
                           className={`${
-                            dateFormat === "DMY"
+                            props.dateFormat === "DMY"
                               ? "bg-electric-violet-900 transition"
                               : "transition"
                           } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setDateFormat("DMY");
+                            props.setDateFormat("DMY");
                           }}
                         >
                           DD/MM/YYYY
                         </button>
                         <button
                           className={`${
-                            dateFormat === "YMD"
+                            props.dateFormat === "YMD"
                               ? "bg-electric-violet-900 transition"
                               : "transition"
                           } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setDateFormat("YMD");
+                            props.setDateFormat("YMD");
                           }}
                         >
                           YYYY/MM/DD
                         </button>
                         <button
                           className={`${
-                            dateFormat === "MDY"
+                            props.dateFormat === "MDY"
                               ? "bg-electric-violet-900 transition"
                               : "transition"
                           } p-4 rounded-xl`}
                           onClick={(e) => {
-                            setDateFormat("MDY");
+                            props.setDateFormat("MDY");
                           }}
                         >
                           MM/DD/YYYY
@@ -286,14 +309,14 @@ export const Options = (props) => {
                 Choose the data you want to display:
               </p>
               <ul className={``}>
-                {values && values.length > 0 ? (
-                  values.map((index) => {
+                {props.values && props.values.length > 0 ? (
+                  props.values.map((index) => {
                     return (
                       <li
                         onClick={() => {
                           axios
                             .get(
-                              `https://5i8qcjp333.execute-api.us-east-1.amazonaws.com/dev/series/${index.variable}/${date[0]}/${date[1]}?token=b24da979c4e5787e082743e930717c9251ec16cb569f2b3b4b404739f9f030d6`,
+                              `https://5i8qcjp333.execute-api.us-east-1.amazonaws.com/dev/series/${index.variable}/${props.date[0]}/${props.date[1]}?token=b24da979c4e5787e082743e930717c9251ec16cb569f2b3b4b404739f9f030d6`,
                               {
                                 headers: {
                                   Authorization:
@@ -302,32 +325,38 @@ export const Options = (props) => {
                               }
                             )
                             .then((res) => {
-                              setVariable((variable) => [
+                              props.setVariable((variable) => [
                                 ...variable,
                                 {
                                   variable: index.variable,
                                   graphTitle: res.data.bmx.series,
-                                  customTitle: title,
+                                  customTitle: props.title,
                                   values: res.data.bmx.series[0].datos,
                                   numbers: res.data.bmx.series[0].datos.map(
                                     (a) =>
-                                      round(a.dato.replace(/\,/g, ""), decimals)
+                                      round(
+                                        a.dato.replace(/\,/g, ""),
+                                        props.decimals
+                                      )
                                   ),
                                   labels: res.data.bmx.series[0].datos.map(
-                                    (a) => changeDateFormat(a.fecha, dateFormat)
+                                    (a) =>
+                                      changeDateFormat(
+                                        a.fecha,
+                                        props.dateFormat
+                                      )
                                   ),
-                                  chart: chart,
-                                  displayType: display,
-                                  graphType: bar,
-                                  graphColor: blockPickerColor,
+                                  chart: props.chart,
+                                  displayType: props.display,
+                                  graphType: props.bar,
+                                  graphColor: props.blockPickerColor,
                                 },
                               ]);
-                              setLoading(false);
-                              setList(!list);
-                              setBar(true);
-                              setChart(false);
-                              setDisplay("bar");
-                              setDateFormat("DMY");
+                              props.setList(!props.list);
+                              props.setBar(true);
+                              props.setChart(false);
+                              props.setDisplay("bar");
+                              props.setDateFormat("DMY");
                             })
                             .catch((err) => console.log(err));
                         }}
@@ -335,7 +364,7 @@ export const Options = (props) => {
                         className="py-4 px-2 m-2 font-medium rounded-lg hover:underline hover:cursor-pointer hover:bg-electric-violet-800 hover:rounded-lg transition"
                       >
                         <p className="font-bold">{index.variable}</p>
-                        {english ? (
+                        {props.english ? (
                           <p className="text-sm">{index.display_name_en}</p>
                         ) : (
                           <p className="text-sm">{index.display_name}</p>
