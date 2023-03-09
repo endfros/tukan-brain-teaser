@@ -1,36 +1,14 @@
 import axios from "axios";
-
 import { SliderPicker } from "react-color";
-
+import round from "../utils/round";
+import changeDateFormat from "../utils/changeDateFormat";
+import handleDecimals from "../utils/handleDecimals";
 import { AnimatePresence, motion } from "framer-motion";
 
-function changeDateFormat(date, format) {
-  const dateParts = date.split("/");
-  if (format === "YMD") {
-    return dateParts[2] + "/" + dateParts[1] + "/" + dateParts[0];
-  } else if (format === "MDY") {
-    return dateParts[1] + "/" + dateParts[0] + "/" + dateParts[2];
-  } else {
-    return date;
-  }
-}
 
-function round(num, places) {
-  return +(Math.round(num + "e+" + places) + "e-" + places);
-}
 
 export const Options = (props) => {
-  const handleDecimals = (value) => {
-    if (value < 0) {
-      setDecimals(0);
-    } else if (value === null) {
-      setDecimals(0);
-    } else {
-      setDecimals(Number(value));
-    }
-  };
 
-  console.log(props);
   return (
     <AnimatePresence>
       {!props.list && (
@@ -375,7 +353,7 @@ export const Options = (props) => {
                     );
                   })
                 ) : (
-                  <h2></h2>
+                  <p></p>
                 )}
               </ul>
             </div>
